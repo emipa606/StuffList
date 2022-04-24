@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using JetBrains.Annotations;
 using RimWorld;
 using UnityEngine;
@@ -11,11 +12,10 @@ namespace StuffList;
 public class MainTabWindow_StuffList : MainTabWindow
 {
     // Display variables
-    private const int HeaderHeight = 50;
-    private const int RowHeight = 30;
-    private const int StatWidth = 80;
-    private const int IconWidth = 29;
-    private const int LabelWidth = 200;
+    private const float HeaderHeight = 50f;
+    private const float RowHeight = 30f;
+    private const float IconWidth = 29f;
+    private const float LabelWidth = 200f;
 
     // Data storage
 
@@ -64,6 +64,14 @@ public class MainTabWindow_StuffList : MainTabWindow
               && thing.stuffProps.statFactors != null
         select thing;
 
+
+    internal static readonly IEnumerable<ThingDef> allStuff =
+        from thing in DefDatabase<ThingDef>.AllDefsListForReading
+        where thing.IsStuff
+        select thing;
+
+    public static Thread thread;
+
     private readonly Color baseColor = GUI.color;
     private bool isDirty = true;
 
@@ -79,10 +87,13 @@ public class MainTabWindow_StuffList : MainTabWindow
 
     private string sortProperty = "label";
     private Source sortSource = Source.Name;
+    private int statCount;
+    private float statWidth = 80f;
 
     internal IEnumerable<ThingDef> stuff = Enumerable.Empty<ThingDef>();
 
     private int stuffCount;
+    private Dictionary<ThingDef, int> stuffCountDictionary;
 
     private float tableHeight;
 
@@ -90,29 +101,37 @@ public class MainTabWindow_StuffList : MainTabWindow
     {
         get
         {
-            var statCount = 15;
+            statCount = 16;
             if (StuffList.SoftWarmBedsLoaded)
             {
                 statCount++;
             }
 
             return new Vector2(
-                IconWidth + LabelWidth + (statCount * StatWidth) + 30,
-                800);
+                UI.screenWidth * 0.95f,
+                UI.screenHeight * 0.5f);
         }
     }
 
     public override void PreOpen()
     {
         base.PreOpen();
+        stuffCountDictionary = new Dictionary<ThingDef, int>();
+        triggerThread();
         isDirty = true;
     }
 
     public override void DoWindowContents(Rect rect)
     {
+        statWidth = (InitialSize.x - LabelWidth - (IconWidth * 2)) / statCount;
         if (isDirty)
         {
             UpdateList();
+        }
+
+        if (GenTicks.TicksGame % GenTicks.TickRareInterval == 0)
+        {
+            triggerThread();
         }
 
         Text.Font = GameFont.Small;
@@ -189,10 +208,12 @@ public class MainTabWindow_StuffList : MainTabWindow
         GUI.color = Color.white;
         PrintCellSort("label", "Name", ww, LabelWidth);
         ww += LabelWidth;
+        PrintCellSort("amount", "Amount", ww, statWidth);
+        ww += statWidth;
         foreach (var h in colHeaders)
         {
             PrintCellSort(h.statDef.defName, h.statDef, h.source, h.label, ww);
-            ww += StatWidth;
+            ww += statWidth;
         }
 
         var scrollRect = new Rect(rect.x, rect.y, rect.width, rect.height);
@@ -211,53 +232,55 @@ public class MainTabWindow_StuffList : MainTabWindow
     {
         DrawCommon(num, w);
         var ww = DrawIcon(num, t);
-        PrintCell(t.LabelCap, num, ww, LabelWidth);
+        PrintCell(t.LabelCap, num, ww, LabelWidth, t.description);
         ww += LabelWidth;
+        PrintCell(stuffCountDictionary.ContainsKey(t) ? stuffCountDictionary[t].ToString() : "0", num, ww);
+        ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.MarketValue, 1), 1);
         PrintCell(t.statBases.GetStatValueFromList(StatDefOf.MarketValue, 1).ToStringMoney(), num, ww);
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Sharp, 1), 1);
         PrintCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Sharp, 1).ToStringPercent(), num, ww);
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Blunt, 1), 1);
         PrintCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Blunt, 1).ToStringPercent(), num, ww);
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Heat, 1), 1);
         PrintCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Heat, 1).ToStringPercent(), num, ww);
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Insulation_Cold, 0), 0);
         PrintCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Insulation_Cold, 0).ToStringTemperatureOffset(),
             num, ww);
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Insulation_Heat, 0), 0);
         PrintCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Insulation_Heat, 0).ToStringTemperatureOffset(),
             num, ww);
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.SharpDamageMultiplier, 1), 1);
         PrintCell(t.statBases.GetStatValueFromList(StatDefOf.SharpDamageMultiplier, 1).ToStringPercent(), num, ww);
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.BluntDamageMultiplier, 1), 1);
         PrintCell(t.statBases.GetStatValueFromList(StatDefOf.BluntDamageMultiplier, 1).ToStringPercent(), num, ww);
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statOffsets.GetStatOffsetFromList(StatDefOf.Beauty), 0);
-        PrintCell(t.stuffProps.statOffsets.GetStatOffsetFromList(StatDefOf.Beauty) + "", num, ww, StatWidth,
+        PrintCell(t.stuffProps.statOffsets.GetStatOffsetFromList(StatDefOf.Beauty) + "", num, ww, statWidth,
             "Beauty = ((Base * Factor) + Offset) * Quality");
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.MaxHitPoints), 1);
         PrintCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.MaxHitPoints).ToStringPercent(), num, ww);
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.Beauty), 1);
         PrintCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.Beauty).ToStringPercent(), num, ww);
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.WorkToMake), 1, true);
         PrintCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.WorkToMake).ToStringPercent(), num, ww);
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.WorkToBuild), 1, true);
         PrintCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.WorkToBuild).ToStringPercent(), num, ww);
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.Flammability), 1, true);
         PrintCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.Flammability).ToStringPercent(), num, ww);
-        ww += StatWidth;
+        ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.MeleeWeapon_CooldownMultiplier),
             1, true);
         PrintCell
@@ -266,7 +289,7 @@ public class MainTabWindow_StuffList : MainTabWindow
             ww);
         if (StuffList.SoftWarmBedsLoaded)
         {
-            ww += StatWidth;
+            ww += statWidth;
             GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDef.Named("Textile_Softness"), 0),
                 0);
             PrintCell
@@ -293,15 +316,20 @@ public class MainTabWindow_StuffList : MainTabWindow
         return inverted ? Color.green : Color.red;
     }
 
-    private int DrawIcon(int rowNum, ThingDef t)
+    private float DrawIcon(int rowNum, ThingDef t)
     {
         var icoRect = new Rect(0, RowHeight * rowNum, IconWidth, IconWidth);
         Widgets.ThingIcon(icoRect, t);
-        return IconWidth + 2;
+        return IconWidth + 2f;
     }
 
-    private void PrintCell(string content, int rowNum, int x, int width = StatWidth, string tooltip = "")
+    private void PrintCell(string content, int rowNum, float x, float width = 0, string tooltip = "")
     {
+        if (width == 0)
+        {
+            width = statWidth;
+        }
+
         var tmpRec = new Rect(x, (RowHeight * rowNum) + 3, width, RowHeight - 3);
         Widgets.Label(tmpRec, content);
         if (!string.IsNullOrEmpty(tooltip))
@@ -310,11 +338,19 @@ public class MainTabWindow_StuffList : MainTabWindow
         }
     }
 
-    private void PrintCellSort(string property, StatDef statDef, Source source, string content, int x,
-        int width = StatWidth)
+    private void PrintCellSort(string property, StatDef statDef, Source source, string content, float x,
+        float width = 0)
     {
+        if (width == 0)
+        {
+            width = statWidth;
+        }
+
         var tmpRec = new Rect(x + 2, 2, width - 2, HeaderHeight - 2);
+        Text.Font = GameFont.Tiny;
         Widgets.Label(tmpRec, content);
+        TooltipHandler.TipRegion(tmpRec, statDef.description);
+        Text.Font = GameFont.Small;
         if (Mouse.IsOver(tmpRec))
         {
             GUI.DrawTexture(tmpRec, TexUI.HighlightTex);
@@ -349,9 +385,15 @@ public class MainTabWindow_StuffList : MainTabWindow
         GUI.DrawTexture(p, texture2D);
     }
 
-    private void PrintCellSort(string property, string content, int x, int width = StatWidth)
+    private void PrintCellSort(string property, string content, float x, float width = 0)
     {
+        if (width == 0)
+        {
+            width = statWidth;
+        }
+
         var tmpRec = new Rect(x + 2, 2, width - 2, HeaderHeight - 2);
+
         Widgets.Label(tmpRec, content);
         if (Mouse.IsOver(tmpRec))
         {
@@ -367,7 +409,7 @@ public class MainTabWindow_StuffList : MainTabWindow
             else
             {
                 sortProperty = property;
-                sortSource = Source.Name;
+                sortSource = property == "Name" ? Source.Name : Source.Amount;
             }
 
             isDirty = true;
@@ -453,6 +495,11 @@ public class MainTabWindow_StuffList : MainTabWindow
                     ? stuff.OrderByDescending(o => o.label)
                     : stuff.OrderBy(o => o.label);
                 break;
+            case Source.Amount:
+                stuff = sortOrder == "DESC"
+                    ? stuff.OrderByDescending(o => stuffCountDictionary.ContainsKey(o) ? stuffCountDictionary[o] : 0)
+                    : stuff.OrderBy(o => stuffCountDictionary.ContainsKey(o) ? stuffCountDictionary[o] : 0);
+                break;
             case Source.Bases:
                 stuff = sortOrder == "DESC"
                     ? stuff.OrderByDescending(o => o.statBases.GetStatValueFromList(sortDef, 1))
@@ -476,6 +523,29 @@ public class MainTabWindow_StuffList : MainTabWindow
         }
     }
 
+    private void triggerThread()
+    {
+        if (thread?.IsAlive == true)
+        {
+            return;
+        }
+
+        thread = new Thread(updateCurrentStuff);
+        thread.Start();
+    }
+
+    private void updateCurrentStuff()
+    {
+        var returnDictionary = new Dictionary<ThingDef, int>();
+        foreach (var thingDef in allStuff)
+        {
+            returnDictionary[thingDef] = Find.CurrentMap.resourceCounter.GetCount(thingDef);
+        }
+
+        stuffCountDictionary = returnDictionary;
+        isDirty = true;
+    }
+
     private void PrintAutoCheckbox(string text, ref bool value, ref float currentX, ref Rect rect,
         bool defaultValue = false)
     {
@@ -490,7 +560,8 @@ public class MainTabWindow_StuffList : MainTabWindow
         BasesZero,
         Factors,
         Offset,
-        Name
+        Name,
+        Amount
     }
 
     private struct ColDef

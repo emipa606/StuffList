@@ -1,4 +1,7 @@
 # Changelog for StuffList
 
+1.3.1 - List-window now uses 95% of the screen width and 50% of the height, dynamically changing the column width. Also added amount of each item on the current map.
+
+
 1.3.0 - First publish
 
