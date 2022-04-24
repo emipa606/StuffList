@@ -409,7 +409,7 @@ public class MainTabWindow_StuffList : MainTabWindow
             else
             {
                 sortProperty = property;
-                sortSource = property == "Name" ? Source.Name : Source.Amount;
+                sortSource = property == "label" ? Source.Name : Source.Amount;
             }
 
             isDirty = true;

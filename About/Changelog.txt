@@ -1,5 +1,8 @@
 # Changelog for StuffList
 
+1.3.3 - Fixed the sorting by name that got lost when adding the Amount-column
+
+
 1.3.2 - 50% height was a bit low, changed to 70% to be more like the original feel of the mod
 
 
