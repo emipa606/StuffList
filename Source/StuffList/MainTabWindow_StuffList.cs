@@ -109,7 +109,7 @@ public class MainTabWindow_StuffList : MainTabWindow
 
             return new Vector2(
                 UI.screenWidth * 0.95f,
-                UI.screenHeight * 0.5f);
+                UI.screenHeight * 0.7f);
         }
     }
 
