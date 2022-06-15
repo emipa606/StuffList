@@ -6,6 +6,9 @@ Update of Pretzalcohuatls mod
 https://steamcommunity.com/sharedfiles/filedetails/?id=2108623238
 
 - Added color to the readout for a better overview
+- Added amount-column, counts all resources on the current map
+- The list-window now dynamically uses 95% of screen width and 70% of screen height
+- Added tooltips on all item and stats
 - Added support for the Softness-stat from https://steamcommunity.com/sharedfiles/filedetails/?id=1713295858][JPT] Soft Warm Beds
 
 ![Image](https://i.imgur.com/pufA0kM.png)
@@ -31,5 +34,6 @@ Safe to add to savegames
 -  For best support, please use the Discord-channel for error-reporting.
 -  Do not report errors by making a discussion-thread, I get no notification of that.
 -  If you have the solution for a problem, please post it to the GitHub repository.
+
 
 

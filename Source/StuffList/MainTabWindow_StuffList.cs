@@ -163,6 +163,8 @@ public class MainTabWindow_StuffList : MainTabWindow
         var colHeaders = Enumerable.Empty<ColDef>();
         colHeaders = colHeaders.Append(new ColDef("StuffList.Base.MarketValue".Translate(), StatDefOf.MarketValue,
             Source.Bases));
+        colHeaders = colHeaders.Append(new ColDef("StuffList.Base.Mass".Translate(), StatDefOf.Mass,
+            Source.Bases));
         colHeaders = colHeaders.Append(new ColDef("StuffList.Base.ArmorSharp".Translate(),
             StatDefOf.StuffPower_Armor_Sharp, Source.Bases));
         colHeaders = colHeaders.Append(new ColDef("StuffList.Base.ArmorBlunt".Translate(),
@@ -238,6 +240,9 @@ public class MainTabWindow_StuffList : MainTabWindow
         ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.MarketValue, 1), 1);
         PrintCell(t.statBases.GetStatValueFromList(StatDefOf.MarketValue, 1).ToStringMoney(), num, ww);
+        ww += statWidth;
+        GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.Mass, 1), 0.5f, true);
+        PrintCell(t.statBases.GetStatValueFromList(StatDefOf.Mass, 1).ToStringMass(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Sharp, 1), 1);
         PrintCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Sharp, 1).ToStringPercent(), num, ww);
