@@ -1,5 +1,8 @@
 # Changelog for StuffList
 
+1.3.5 - Added stacksize property
+
+
 1.3.4 - Added mass to the list
 
 

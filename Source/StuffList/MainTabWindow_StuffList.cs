@@ -101,7 +101,7 @@ public class MainTabWindow_StuffList : MainTabWindow
     {
         get
         {
-            statCount = 16;
+            statCount = 18;
             if (StuffList.SoftWarmBedsLoaded)
             {
                 statCount++;
@@ -210,7 +210,9 @@ public class MainTabWindow_StuffList : MainTabWindow
         GUI.color = Color.white;
         PrintCellSort("label", "Name", ww, LabelWidth);
         ww += LabelWidth;
-        PrintCellSort("amount", "Amount", ww, statWidth);
+        PrintCellSort("amount", "StuffList.Amount".Translate(), ww, statWidth);
+        ww += statWidth;
+        PrintCellSort("stacksize", "StuffList.Stacksize".Translate(), ww, statWidth);
         ww += statWidth;
         foreach (var h in colHeaders)
         {
@@ -237,6 +239,8 @@ public class MainTabWindow_StuffList : MainTabWindow
         PrintCell(t.LabelCap, num, ww, LabelWidth, t.description);
         ww += LabelWidth;
         PrintCell(stuffCountDictionary.ContainsKey(t) ? stuffCountDictionary[t].ToString() : "0", num, ww);
+        ww += statWidth;
+        PrintCell(t.stackLimit.ToString(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.MarketValue, 1), 1);
         PrintCell(t.statBases.GetStatValueFromList(StatDefOf.MarketValue, 1).ToStringMoney(), num, ww);
@@ -414,7 +418,18 @@ public class MainTabWindow_StuffList : MainTabWindow
             else
             {
                 sortProperty = property;
-                sortSource = property == "label" ? Source.Name : Source.Amount;
+                switch (property)
+                {
+                    case "label":
+                        sortSource = Source.Name;
+                        break;
+                    case "amount":
+                        sortSource = Source.Amount;
+                        break;
+                    case "stacksize":
+                        sortSource = Source.Stacksize;
+                        break;
+                }
             }
 
             isDirty = true;
@@ -505,6 +520,11 @@ public class MainTabWindow_StuffList : MainTabWindow
                     ? stuff.OrderByDescending(o => stuffCountDictionary.ContainsKey(o) ? stuffCountDictionary[o] : 0)
                     : stuff.OrderBy(o => stuffCountDictionary.ContainsKey(o) ? stuffCountDictionary[o] : 0);
                 break;
+            case Source.Stacksize:
+                stuff = sortOrder == "DESC"
+                    ? stuff.OrderByDescending(o => o.stackLimit)
+                    : stuff.OrderBy(o => o.stackLimit);
+                break;
             case Source.Bases:
                 stuff = sortOrder == "DESC"
                     ? stuff.OrderByDescending(o => o.statBases.GetStatValueFromList(sortDef, 1))
@@ -566,7 +586,8 @@ public class MainTabWindow_StuffList : MainTabWindow
         Factors,
         Offset,
         Name,
-        Amount
+        Amount,
+        Stacksize
     }
 
     private struct ColDef

@@ -2,6 +2,7 @@
 <LanguageData>
   <StuffList>Stuff List</StuffList>
   <StuffList.Amount>Amount</StuffList.Amount>
+  <StuffList.Stacksize>Stacksize</StuffList.Stacksize>
   <StuffList.Title>Stuff List</StuffList.Title>
   <StuffList.Metallic>Metallic</StuffList.Metallic>
   <StuffList.Woody>Woody</StuffList.Woody>

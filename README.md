@@ -9,6 +9,7 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2108623238
 - Added amount-column, counts all resources on the current map
 - The list-window now dynamically uses 95% of screen width and 70% of screen height
 - Added tooltips on all item and stats
+- Added mass
 - Added support for the Softness-stat from https://steamcommunity.com/sharedfiles/filedetails/?id=1713295858][JPT] Soft Warm Beds
 
 ![Image](https://i.imgur.com/pufA0kM.png)
