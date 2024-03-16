@@ -238,7 +238,7 @@ public class MainTabWindow_StuffList : MainTabWindow
         var ww = DrawIcon(num, t);
         PrintCell(t.LabelCap, num, ww, LabelWidth, t.description);
         ww += LabelWidth;
-        PrintCell(stuffCountDictionary.ContainsKey(t) ? stuffCountDictionary[t].ToString() : "0", num, ww);
+        PrintCell(stuffCountDictionary.TryGetValue(t, out var value) ? value.ToString() : "0", num, ww);
         ww += statWidth;
         PrintCell(t.stackLimit.ToString(), num, ww);
         ww += statWidth;
@@ -517,8 +517,8 @@ public class MainTabWindow_StuffList : MainTabWindow
                 break;
             case Source.Amount:
                 stuff = sortOrder == "DESC"
-                    ? stuff.OrderByDescending(o => stuffCountDictionary.ContainsKey(o) ? stuffCountDictionary[o] : 0)
-                    : stuff.OrderBy(o => stuffCountDictionary.ContainsKey(o) ? stuffCountDictionary[o] : 0);
+                    ? stuff.OrderByDescending(o => stuffCountDictionary.GetValueOrDefault(o, 0))
+                    : stuff.OrderBy(o => stuffCountDictionary.GetValueOrDefault(o, 0));
                 break;
             case Source.Stacksize:
                 stuff = sortOrder == "DESC"
