@@ -1,6 +1,7 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <StuffList>Stuff List</StuffList>
+  <StuffList.Search>Search: </StuffList.Search>
   <StuffList.Amount>Amount</StuffList.Amount>
   <StuffList.Stacksize>Stacksize</StuffList.Stacksize>
   <StuffList.Title>Stuff List</StuffList.Title>

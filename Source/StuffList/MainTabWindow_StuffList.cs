@@ -76,6 +76,7 @@ public class MainTabWindow_StuffList : MainTabWindow
     private bool isDirty = true;
 
     public Vector2 scrollPosition = Vector2.zero;
+    private string searchText;
     private bool showFabric = true;
     private bool showLeathery = true;
 
@@ -90,7 +91,7 @@ public class MainTabWindow_StuffList : MainTabWindow
     private int statCount;
     private float statWidth = 80f;
 
-    internal IEnumerable<ThingDef> stuff = Enumerable.Empty<ThingDef>();
+    internal IEnumerable<ThingDef> stuff = [];
 
     private int stuffCount;
     private Dictionary<ThingDef, int> stuffCountDictionary;
@@ -151,6 +152,8 @@ public class MainTabWindow_StuffList : MainTabWindow
         PrintAutoCheckbox("StuffList.Stony".Translate(), ref showStony, ref currentX, ref rect);
         PrintAutoCheckbox("StuffList.Fabric".Translate(), ref showFabric, ref currentX, ref rect);
         PrintAutoCheckbox("StuffList.Leathery".Translate(), ref showLeathery, ref currentX, ref rect);
+        searchText = Widgets.TextEntryLabeled(new Rect(currentX, rect.y, 200, 30), "StuffList.Search".Translate(),
+            searchText);
 
         if (showMetallicOld != showMetallic || showWoodyOld != showWoody || showStonyOld != showStony
             || showFabricOld != showFabric || showLeatheryOld != showLeathery)
@@ -222,7 +225,14 @@ public class MainTabWindow_StuffList : MainTabWindow
 
         var scrollRect = new Rect(rect.x, rect.y, rect.width, rect.height);
         Widgets.BeginScrollView(scrollRect, ref scrollPosition, inRect);
-        foreach (var thing in stuff)
+        var stuffFiltered = stuff.ToList();
+        if (!string.IsNullOrEmpty(searchText))
+        {
+            stuffFiltered = stuffFiltered.Where(thingDef => thingDef.label.ToLower().Contains(searchText.ToLower()))
+                .ToList();
+        }
+
+        foreach (var thing in stuffFiltered)
         {
             DrawRow(thing, num, inRect.width);
             num++;
@@ -473,7 +483,7 @@ public class MainTabWindow_StuffList : MainTabWindow
 
     private void UpdateList()
     {
-        stuff = Enumerable.Empty<ThingDef>();
+        stuff = [];
         if (showMetallic)
         {
             stuff = stuff.Union(metallicStuff);
