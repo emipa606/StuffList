@@ -19,7 +19,7 @@ public class MainTabWindow_StuffList : MainTabWindow
 
     // Data storage
 
-    internal static readonly IEnumerable<ThingDef> metallicStuff =
+    private static readonly IEnumerable<ThingDef> metallicStuff =
         from thing in DefDatabase<ThingDef>.AllDefsListForReading
         where thing.category == ThingCategory.Item
               && thing.stuffProps != null
@@ -28,7 +28,7 @@ public class MainTabWindow_StuffList : MainTabWindow
               && thing.stuffProps.statFactors != null
         select thing;
 
-    internal static readonly IEnumerable<ThingDef> woodyStuff =
+    private static readonly IEnumerable<ThingDef> woodyStuff =
         from thing in DefDatabase<ThingDef>.AllDefsListForReading
         where thing.category == ThingCategory.Item
               && thing.stuffProps != null
@@ -37,7 +37,7 @@ public class MainTabWindow_StuffList : MainTabWindow
               && thing.stuffProps.statFactors != null
         select thing;
 
-    internal static readonly IEnumerable<ThingDef> stonyStuff =
+    private static readonly IEnumerable<ThingDef> stonyStuff =
         from thing in DefDatabase<ThingDef>.AllDefsListForReading
         where thing.category == ThingCategory.Item
               && thing.stuffProps != null
@@ -46,7 +46,7 @@ public class MainTabWindow_StuffList : MainTabWindow
               && thing.stuffProps.statFactors != null
         select thing;
 
-    internal static readonly IEnumerable<ThingDef> fabricStuff =
+    private static readonly IEnumerable<ThingDef> fabricStuff =
         from thing in DefDatabase<ThingDef>.AllDefsListForReading
         where thing.category == ThingCategory.Item
               && thing.stuffProps != null
@@ -55,7 +55,7 @@ public class MainTabWindow_StuffList : MainTabWindow
               && thing.stuffProps.statFactors != null
         select thing;
 
-    internal static readonly IEnumerable<ThingDef> leatheryStuff =
+    private static readonly IEnumerable<ThingDef> leatheryStuff =
         from thing in DefDatabase<ThingDef>.AllDefsListForReading
         where thing.category == ThingCategory.Item
               && thing.stuffProps != null
@@ -65,17 +65,17 @@ public class MainTabWindow_StuffList : MainTabWindow
         select thing;
 
 
-    internal static readonly IEnumerable<ThingDef> allStuff =
+    private static readonly IEnumerable<ThingDef> allStuff =
         from thing in DefDatabase<ThingDef>.AllDefsListForReading
         where thing.IsStuff
         select thing;
 
-    public static Thread thread;
+    private static Thread thread;
 
     private readonly Color baseColor = GUI.color;
     private bool isDirty = true;
 
-    public Vector2 scrollPosition = Vector2.zero;
+    private Vector2 scrollPosition = Vector2.zero;
     private string searchText;
     private bool showFabric = true;
     private bool showLeathery = true;
@@ -91,7 +91,7 @@ public class MainTabWindow_StuffList : MainTabWindow
     private int statCount;
     private float statWidth = 80f;
 
-    internal IEnumerable<ThingDef> stuff = [];
+    private IEnumerable<ThingDef> stuff = [];
 
     private int stuffCount;
     private Dictionary<ThingDef, int> stuffCountDictionary;
@@ -127,7 +127,7 @@ public class MainTabWindow_StuffList : MainTabWindow
         statWidth = (InitialSize.x - LabelWidth - (IconWidth * 2)) / statCount;
         if (isDirty)
         {
-            UpdateList();
+            updateList();
         }
 
         if (GenTicks.TicksGame % GenTicks.TickRareInterval == 0)
@@ -147,11 +147,11 @@ public class MainTabWindow_StuffList : MainTabWindow
         var showFabricOld = showFabric;
         var showLeatheryOld = showLeathery;
 
-        PrintAutoCheckbox("StuffList.Metallic".Translate(), ref showMetallic, ref currentX, ref rect);
-        PrintAutoCheckbox("StuffList.Woody".Translate(), ref showWoody, ref currentX, ref rect);
-        PrintAutoCheckbox("StuffList.Stony".Translate(), ref showStony, ref currentX, ref rect);
-        PrintAutoCheckbox("StuffList.Fabric".Translate(), ref showFabric, ref currentX, ref rect);
-        PrintAutoCheckbox("StuffList.Leathery".Translate(), ref showLeathery, ref currentX, ref rect);
+        printAutoCheckbox("StuffList.Metallic".Translate(), ref showMetallic, ref currentX, ref rect);
+        printAutoCheckbox("StuffList.Woody".Translate(), ref showWoody, ref currentX, ref rect);
+        printAutoCheckbox("StuffList.Stony".Translate(), ref showStony, ref currentX, ref rect);
+        printAutoCheckbox("StuffList.Fabric".Translate(), ref showFabric, ref currentX, ref rect);
+        printAutoCheckbox("StuffList.Leathery".Translate(), ref showLeathery, ref currentX, ref rect);
         searchText = Widgets.TextEntryLabeled(new Rect(currentX, rect.y, 200, 30), "StuffList.Search".Translate(),
             searchText);
 
@@ -211,15 +211,15 @@ public class MainTabWindow_StuffList : MainTabWindow
         GUI.color = new Color(1f, 1f, 1f, 0.2f);
         Widgets.DrawLineHorizontal(0, HeaderHeight, inRect.width);
         GUI.color = Color.white;
-        PrintCellSort("label", "Name", ww, LabelWidth);
+        printCellSort("label", "Name", ww, LabelWidth);
         ww += LabelWidth;
-        PrintCellSort("amount", "StuffList.Amount".Translate(), ww, statWidth);
+        printCellSort("amount", "StuffList.Amount".Translate(), ww, statWidth);
         ww += statWidth;
-        PrintCellSort("stacksize", "StuffList.Stacksize".Translate(), ww, statWidth);
+        printCellSort("stacksize", "StuffList.Stacksize".Translate(), ww, statWidth);
         ww += statWidth;
         foreach (var h in colHeaders)
         {
-            PrintCellSort(h.statDef.defName, h.statDef, h.source, h.label, ww);
+            printCellSort(h.statDef.defName, h.statDef, h.source, h.label, ww);
             ww += statWidth;
         }
 
@@ -244,65 +244,65 @@ public class MainTabWindow_StuffList : MainTabWindow
 
     private void DrawRow(ThingDef t, int num, float w)
     {
-        DrawCommon(num, w);
-        var ww = DrawIcon(num, t);
-        PrintCell(t.LabelCap, num, ww, LabelWidth, t.description);
+        drawCommon(num, w);
+        var ww = drawIcon(num, t);
+        printCell(t.LabelCap, num, ww, LabelWidth, t.description);
         ww += LabelWidth;
-        PrintCell(stuffCountDictionary.TryGetValue(t, out var value) ? value.ToString() : "0", num, ww);
+        printCell(stuffCountDictionary.TryGetValue(t, out var value) ? value.ToString() : "0", num, ww);
         ww += statWidth;
-        PrintCell(t.stackLimit.ToString(), num, ww);
+        printCell(t.stackLimit.ToString(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.MarketValue, 1), 1);
-        PrintCell(t.statBases.GetStatValueFromList(StatDefOf.MarketValue, 1).ToStringMoney(), num, ww);
+        printCell(t.statBases.GetStatValueFromList(StatDefOf.MarketValue, 1).ToStringMoney(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.Mass, 1), 0.5f, true);
-        PrintCell(t.statBases.GetStatValueFromList(StatDefOf.Mass, 1).ToStringMass(), num, ww);
+        printCell(t.statBases.GetStatValueFromList(StatDefOf.Mass, 1).ToStringMass(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Sharp, 1), 1);
-        PrintCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Sharp, 1).ToStringPercent(), num, ww);
+        printCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Sharp, 1).ToStringPercent(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Blunt, 1), 1);
-        PrintCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Blunt, 1).ToStringPercent(), num, ww);
+        printCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Blunt, 1).ToStringPercent(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Heat, 1), 1);
-        PrintCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Heat, 1).ToStringPercent(), num, ww);
+        printCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Armor_Heat, 1).ToStringPercent(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Insulation_Cold, 0), 0);
-        PrintCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Insulation_Cold, 0).ToStringTemperatureOffset(),
+        printCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Insulation_Cold, 0).ToStringTemperatureOffset(),
             num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Insulation_Heat, 0), 0);
-        PrintCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Insulation_Heat, 0).ToStringTemperatureOffset(),
+        printCell(t.statBases.GetStatValueFromList(StatDefOf.StuffPower_Insulation_Heat, 0).ToStringTemperatureOffset(),
             num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.SharpDamageMultiplier, 1), 1);
-        PrintCell(t.statBases.GetStatValueFromList(StatDefOf.SharpDamageMultiplier, 1).ToStringPercent(), num, ww);
+        printCell(t.statBases.GetStatValueFromList(StatDefOf.SharpDamageMultiplier, 1).ToStringPercent(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDefOf.BluntDamageMultiplier, 1), 1);
-        PrintCell(t.statBases.GetStatValueFromList(StatDefOf.BluntDamageMultiplier, 1).ToStringPercent(), num, ww);
+        printCell(t.statBases.GetStatValueFromList(StatDefOf.BluntDamageMultiplier, 1).ToStringPercent(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statOffsets.GetStatOffsetFromList(StatDefOf.Beauty), 0);
-        PrintCell(t.stuffProps.statOffsets.GetStatOffsetFromList(StatDefOf.Beauty) + "", num, ww, statWidth,
+        printCell(t.stuffProps.statOffsets.GetStatOffsetFromList(StatDefOf.Beauty) + "", num, ww, statWidth,
             "Beauty = ((Base * Factor) + Offset) * Quality");
         ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.MaxHitPoints), 1);
-        PrintCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.MaxHitPoints).ToStringPercent(), num, ww);
+        printCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.MaxHitPoints).ToStringPercent(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.Beauty), 1);
-        PrintCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.Beauty).ToStringPercent(), num, ww);
+        printCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.Beauty).ToStringPercent(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.WorkToMake), 1, true);
-        PrintCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.WorkToMake).ToStringPercent(), num, ww);
+        printCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.WorkToMake).ToStringPercent(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.WorkToBuild), 1, true);
-        PrintCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.WorkToBuild).ToStringPercent(), num, ww);
+        printCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.WorkToBuild).ToStringPercent(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.Flammability), 1, true);
-        PrintCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.Flammability).ToStringPercent(), num, ww);
+        printCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.Flammability).ToStringPercent(), num, ww);
         ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.MeleeWeapon_CooldownMultiplier),
             1, true);
-        PrintCell
+        printCell
         (t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.MeleeWeapon_CooldownMultiplier).ToStringPercent(),
             num,
             ww);
@@ -311,7 +311,7 @@ public class MainTabWindow_StuffList : MainTabWindow
             ww += statWidth;
             GUI.color = valueColor(t.statBases.GetStatValueFromList(StatDef.Named("Textile_Softness"), 0),
                 0);
-            PrintCell
+            printCell
             (t.statBases.GetStatValueFromList(StatDef.Named("Textile_Softness"), 0).ToStringPercent(),
                 num,
                 ww);
@@ -335,14 +335,14 @@ public class MainTabWindow_StuffList : MainTabWindow
         return inverted ? Color.green : Color.red;
     }
 
-    private float DrawIcon(int rowNum, ThingDef t)
+    private static float drawIcon(int rowNum, ThingDef t)
     {
         var icoRect = new Rect(0, RowHeight * rowNum, IconWidth, IconWidth);
         Widgets.ThingIcon(icoRect, t);
         return IconWidth + 2f;
     }
 
-    private void PrintCell(string content, int rowNum, float x, float width = 0, string tooltip = "")
+    private void printCell(string content, int rowNum, float x, float width = 0, string tooltip = "")
     {
         if (width == 0)
         {
@@ -357,7 +357,7 @@ public class MainTabWindow_StuffList : MainTabWindow
         }
     }
 
-    private void PrintCellSort(string property, StatDef statDef, Source source, string content, float x,
+    private void printCellSort(string property, StatDef statDef, Source source, string content, float x,
         float width = 0)
     {
         if (width == 0)
@@ -404,7 +404,7 @@ public class MainTabWindow_StuffList : MainTabWindow
         GUI.DrawTexture(p, texture2D);
     }
 
-    private void PrintCellSort(string property, string content, float x, float width = 0)
+    private void printCellSort(string property, string content, float x, float width = 0)
     {
         if (width == 0)
         {
@@ -458,7 +458,7 @@ public class MainTabWindow_StuffList : MainTabWindow
         GUI.DrawTexture(p, texture2D);
     }
 
-    private void DrawCommon(int num, float w)
+    private static void drawCommon(int num, float w)
     {
         var fnum = num;
         if (num == -1)
@@ -481,7 +481,7 @@ public class MainTabWindow_StuffList : MainTabWindow
         }
     }
 
-    private void UpdateList()
+    private void updateList()
     {
         stuff = [];
         if (showMetallic)
@@ -511,12 +511,12 @@ public class MainTabWindow_StuffList : MainTabWindow
 
         stuffCount = stuff.Count();
 
-        UpdateListSorting();
+        updateListSorting();
 
         isDirty = false;
     }
 
-    private void UpdateListSorting()
+    private void updateListSorting()
     {
         switch (sortSource)
         {
@@ -581,7 +581,7 @@ public class MainTabWindow_StuffList : MainTabWindow
         isDirty = true;
     }
 
-    private void PrintAutoCheckbox(string text, ref bool value, ref float currentX, ref Rect rect,
+    private static void printAutoCheckbox(string text, ref bool value, ref float currentX, ref Rect rect,
         bool defaultValue = false)
     {
         var textWidth = Text.CalcSize(text).x + 25f;

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <!-- EN: Stuff -->
+  <StuffList.label>Stuff</StuffList.label>
+  <!-- EN: A list of what stuffs are available, for comparison in crafting and construction. -->
+  <StuffList.description>A list of what stuffs are available, for comparison in crafting and construction.</StuffList.description>
+</LanguageData>
