@@ -109,7 +109,7 @@ public class MainTabWindow_StuffList : MainTabWindow
             }
 
             return new Vector2(
-                UI.screenWidth * 0.95f,
+                UI.screenWidth * StuffListMod.Instance.Settings.ScreenWidth,
                 UI.screenHeight * 0.7f);
         }
     }
@@ -234,7 +234,7 @@ public class MainTabWindow_StuffList : MainTabWindow
 
         foreach (var thing in stuffFiltered)
         {
-            DrawRow(thing, num, inRect.width);
+            drawRow(thing, num, inRect.width);
             num++;
         }
 
@@ -242,7 +242,7 @@ public class MainTabWindow_StuffList : MainTabWindow
         GUI.EndGroup();
     }
 
-    private void DrawRow(ThingDef t, int num, float w)
+    private void drawRow(ThingDef t, int num, float w)
     {
         drawCommon(num, w);
         var ww = drawIcon(num, t);
