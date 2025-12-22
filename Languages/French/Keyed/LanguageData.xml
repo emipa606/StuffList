@@ -29,4 +29,6 @@
   <StuffList.Base.TextileSoftness>Douceur</StuffList.Base.TextileSoftness>
   <StuffList.Search>Recherche :</StuffList.Search>
   <!-- Compatibility -->
+  <StuffList.Factor.DoorOpenSpeed>Vitesse d'ouverture des portes</StuffList.Factor.DoorOpenSpeed>
+  <StuffList.Factor.BedRestEffectiveness>Efficacité du repos au lit</StuffList.Factor.BedRestEffectiveness>
 </LanguageData>

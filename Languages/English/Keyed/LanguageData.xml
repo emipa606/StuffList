@@ -25,7 +25,9 @@
   <StuffList.Factor.WorkMake>Work to Make</StuffList.Factor.WorkMake>
   <StuffList.Factor.WorkBuild>Work to Build</StuffList.Factor.WorkBuild>
   <StuffList.Factor.Flammability>Flammability</StuffList.Factor.Flammability>
+  <StuffList.Factor.DoorOpenSpeed>Door Open Speed</StuffList.Factor.DoorOpenSpeed>
   <StuffList.Factor.MeleeCooldown>Melee Cooldown</StuffList.Factor.MeleeCooldown>
+  <StuffList.Factor.BedRestEffectiveness>Bed Rest Effectiveness</StuffList.Factor.BedRestEffectiveness>
   <!-- Compatibility -->
   <StuffList.Base.TextileSoftness>Softness</StuffList.Base.TextileSoftness>
 </LanguageData>

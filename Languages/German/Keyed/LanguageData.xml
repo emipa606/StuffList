@@ -29,4 +29,6 @@
   <StuffList.Base.TextileSoftness>Sanftheit</StuffList.Base.TextileSoftness>
   <StuffList.Search>Suche:</StuffList.Search>
   <!-- Compatibility -->
+  <StuffList.Factor.DoorOpenSpeed>Tür öffnen Geschwindigkeit</StuffList.Factor.DoorOpenSpeed>
+  <StuffList.Factor.BedRestEffectiveness>Bettruhe Effektivität</StuffList.Factor.BedRestEffectiveness>
 </LanguageData>

@@ -102,7 +102,7 @@ public class MainTabWindow_StuffList : MainTabWindow
     {
         get
         {
-            statCount = 18;
+            statCount = 20;
             if (StuffList.SoftWarmBedsLoaded)
             {
                 statCount++;
@@ -194,8 +194,12 @@ public class MainTabWindow_StuffList : MainTabWindow
             Source.Factors));
         colHeaders = colHeaders.Append(new ColDef("StuffList.Factor.Flammability".Translate(), StatDefOf.Flammability,
             Source.Factors));
+        colHeaders = colHeaders.Append(new ColDef("StuffList.Factor.DoorOpenSpeed".Translate(),
+            StatDefOf.DoorOpenSpeed, Source.Factors));
         colHeaders = colHeaders.Append(new ColDef("StuffList.Factor.MeleeCooldown".Translate(),
             StatDefOf.MeleeWeapon_CooldownMultiplier, Source.Factors));
+        colHeaders = colHeaders.Append(new ColDef("StuffList.Factor.BedRestEffectiveness".Translate(),
+            StatDefOf.BedRestEffectiveness, Source.Factors));
         if (StuffList.SoftWarmBedsLoaded)
         {
             colHeaders = colHeaders.Append(new ColDef("StuffList.Base.TextileSoftness".Translate(),
@@ -300,10 +304,19 @@ public class MainTabWindow_StuffList : MainTabWindow
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.Flammability), 1, true);
         printCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.Flammability).ToStringPercent(), num, ww);
         ww += statWidth;
+        GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.DoorOpenSpeed), 1);
+        printCell(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.DoorOpenSpeed).ToStringPercent(), num, ww);
+        ww += statWidth;
         GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.MeleeWeapon_CooldownMultiplier),
             1, true);
         printCell
         (t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.MeleeWeapon_CooldownMultiplier).ToStringPercent(),
+            num,
+            ww);
+        ww += statWidth;
+        GUI.color = valueColor(t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.BedRestEffectiveness), 1);
+        printCell
+        (t.stuffProps.statFactors.GetStatFactorFromList(StatDefOf.BedRestEffectiveness).ToStringPercent(),
             num,
             ww);
         if (StuffList.SoftWarmBedsLoaded)

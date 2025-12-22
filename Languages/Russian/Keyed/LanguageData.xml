@@ -29,4 +29,6 @@
   <StuffList.Base.TextileSoftness>Мягкость</StuffList.Base.TextileSoftness>
   <StuffList.Search>Поиск:</StuffList.Search>
   <!-- Compatibility -->
+  <StuffList.Factor.DoorOpenSpeed>Скорость открытия двери</StuffList.Factor.DoorOpenSpeed>
+  <StuffList.Factor.BedRestEffectiveness>Эффективность постельного режима</StuffList.Factor.BedRestEffectiveness>
 </LanguageData>
