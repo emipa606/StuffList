@@ -31,4 +31,5 @@
   <!-- Compatibility -->
   <StuffList.Factor.DoorOpenSpeed>Скорость открытия двери</StuffList.Factor.DoorOpenSpeed>
   <StuffList.Factor.BedRestEffectiveness>Эффективность постельного режима</StuffList.Factor.BedRestEffectiveness>
+  <StuffList.AvailableOnly>Показать только доступные</StuffList.AvailableOnly>
 </LanguageData>

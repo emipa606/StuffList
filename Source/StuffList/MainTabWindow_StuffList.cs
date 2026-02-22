@@ -73,6 +73,7 @@ public class MainTabWindow_StuffList : MainTabWindow
     private static Thread thread;
 
     private readonly Color baseColor = GUI.color;
+    private bool availableOnly;
     private bool isDirty = true;
 
     private Vector2 scrollPosition = Vector2.zero;
@@ -146,6 +147,7 @@ public class MainTabWindow_StuffList : MainTabWindow
         var showStonyOld = showStony;
         var showFabricOld = showFabric;
         var showLeatheryOld = showLeathery;
+        var availableOnlyOld = availableOnly;
 
         printAutoCheckbox("StuffList.Metallic".Translate(), ref showMetallic, ref currentX, ref rect);
         printAutoCheckbox("StuffList.Woody".Translate(), ref showWoody, ref currentX, ref rect);
@@ -154,9 +156,12 @@ public class MainTabWindow_StuffList : MainTabWindow
         printAutoCheckbox("StuffList.Leathery".Translate(), ref showLeathery, ref currentX, ref rect);
         searchText = Widgets.TextEntryLabeled(new Rect(currentX, rect.y, 200, 30), "StuffList.Search".Translate(),
             searchText);
+        currentX += 300;
+        Widgets.CheckboxLabeled(new Rect(currentX, rect.y, 200, 30), "StuffList.AvailableOnly".Translate(),
+            ref availableOnly);
 
         if (showMetallicOld != showMetallic || showWoodyOld != showWoody || showStonyOld != showStony
-            || showFabricOld != showFabric || showLeatheryOld != showLeathery)
+            || showFabricOld != showFabric || showLeatheryOld != showLeathery || availableOnlyOld != availableOnly)
         {
             isDirty = true;
         }
@@ -520,6 +525,11 @@ public class MainTabWindow_StuffList : MainTabWindow
         if (showLeathery)
         {
             stuff = stuff.Union(leatheryStuff);
+        }
+
+        if (availableOnly)
+        {
+            stuff = stuff.Where(thingDef => stuffCountDictionary.TryGetValue(thingDef, out var value) && value > 0);
         }
 
         stuffCount = stuff.Count();

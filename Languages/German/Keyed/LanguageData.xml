@@ -31,4 +31,5 @@
   <!-- Compatibility -->
   <StuffList.Factor.DoorOpenSpeed>Tür öffnen Geschwindigkeit</StuffList.Factor.DoorOpenSpeed>
   <StuffList.Factor.BedRestEffectiveness>Bettruhe Effektivität</StuffList.Factor.BedRestEffectiveness>
+  <StuffList.AvailableOnly>Nur verfügbare anzeigen</StuffList.AvailableOnly>
 </LanguageData>

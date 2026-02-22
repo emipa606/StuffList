@@ -31,4 +31,5 @@
   <!-- Compatibility -->
   <StuffList.Factor.DoorOpenSpeed>Vitesse d'ouverture des portes</StuffList.Factor.DoorOpenSpeed>
   <StuffList.Factor.BedRestEffectiveness>Efficacité du repos au lit</StuffList.Factor.BedRestEffectiveness>
+  <StuffList.AvailableOnly>Seul l'affichage est disponible</StuffList.AvailableOnly>
 </LanguageData>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <StuffList>Stuff List</StuffList>
+  <StuffList.AvailableOnly>Only show available</StuffList.AvailableOnly>
   <StuffList.Search>Search: </StuffList.Search>
   <StuffList.Amount>Amount</StuffList.Amount>
   <StuffList.Stacksize>Stacksize</StuffList.Stacksize>

@@ -1,5 +1,9 @@
 # Changelog for StuffList
 
+1.6.4 - Added option to only show stuff in storage
+Used DeepL to update translations for ChineseSimplified, French, German, Russian
+
+
 1.6.3 - Added Door Open Speed and Bed Rest Effectiveness
 Used DeepL to update translations for ChineseSimplified, French, German, Russian
 
