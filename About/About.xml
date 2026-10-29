@@ -11,6 +11,7 @@
     <li>1.4</li>
     <li>1.5</li>
     <li>1.6</li>
+    <li>1.7</li>
   </supportedVersions>
   <modDependencies />
   <loadAfter />
@@ -25,6 +26,7 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2108623238
 - Added mass
 - Added stack-size
 - Added support for the Softness-stat from [url=https://steamcommunity.com/sharedfiles/filedetails/?id=1713295858][JPT] Soft Warm Beds[/url]
+- Added option to only show items in storage
 
 [img]https://img.litet.net/logos/Notice.png[/img]
 
@@ -59,6 +61,6 @@ Safe to add to savegames
 [*] Use [url=https://github.com/RimSort/RimSort/releases/latest]RimSort[/url] to sort your mods
 [/list] 
 
-[url=https://steamcommunity.com/sharedfiles/filedetails/changelog/2798767227][img]https://img.shields.io/github/v/release/emipa606/StuffList?label=latest%20version&amp;style=plastic&amp;color=9f1111&amp;labelColor=black[/img][/url] | tags: comparisons, tool</description>
-  <modVersion IgnoreIfNoMatchingField="True">1.6.4</modVersion>
+[url=https://steamcommunity.com/sharedfiles/filedetails/changelog/2798767227][img]https://img.shields.io/github/v/release/emipa606/StuffList?label=latest%20version&amp;style=plastic&amp;color=9f1111&amp;labelColor=black[/img][/url] | comparisons, tool</description>
+  <modVersion IgnoreIfNoMatchingField="True">1.7.0</modVersion>
 </ModMetaData>

@@ -123,7 +123,7 @@ public class MainTabWindow_StuffList : MainTabWindow
         isDirty = true;
     }
 
-    public override void DoWindowContents(Rect rect)
+    public override void DoWindowContents(Rect inRect)
     {
         statWidth = (InitialSize.x - LabelWidth - (IconWidth * 2)) / statCount;
         if (isDirty)
@@ -140,7 +140,7 @@ public class MainTabWindow_StuffList : MainTabWindow
         Text.Anchor = TextAnchor.UpperLeft;
         GUI.color = Color.white;
 
-        var currentX = rect.x;
+        var currentX = inRect.x;
 
         var showMetallicOld = showMetallic;
         var showWoodyOld = showWoody;
@@ -149,15 +149,15 @@ public class MainTabWindow_StuffList : MainTabWindow
         var showLeatheryOld = showLeathery;
         var availableOnlyOld = availableOnly;
 
-        printAutoCheckbox("StuffList.Metallic".Translate(), ref showMetallic, ref currentX, ref rect);
-        printAutoCheckbox("StuffList.Woody".Translate(), ref showWoody, ref currentX, ref rect);
-        printAutoCheckbox("StuffList.Stony".Translate(), ref showStony, ref currentX, ref rect);
-        printAutoCheckbox("StuffList.Fabric".Translate(), ref showFabric, ref currentX, ref rect);
-        printAutoCheckbox("StuffList.Leathery".Translate(), ref showLeathery, ref currentX, ref rect);
-        searchText = Widgets.TextEntryLabeled(new Rect(currentX, rect.y, 200, 30), "StuffList.Search".Translate(),
+        printAutoCheckbox("StuffList.Metallic".Translate(), ref showMetallic, ref currentX, ref inRect);
+        printAutoCheckbox("StuffList.Woody".Translate(), ref showWoody, ref currentX, ref inRect);
+        printAutoCheckbox("StuffList.Stony".Translate(), ref showStony, ref currentX, ref inRect);
+        printAutoCheckbox("StuffList.Fabric".Translate(), ref showFabric, ref currentX, ref inRect);
+        printAutoCheckbox("StuffList.Leathery".Translate(), ref showLeathery, ref currentX, ref inRect);
+        searchText = Widgets.TextEntryLabeled(new Rect(currentX, inRect.y, 200, 30), "StuffList.Search".Translate(),
             searchText);
         currentX += 300;
-        Widgets.CheckboxLabeled(new Rect(currentX, rect.y, 200, 30), "StuffList.AvailableOnly".Translate(),
+        Widgets.CheckboxLabeled(new Rect(currentX, inRect.y, 200, 30), "StuffList.AvailableOnly".Translate(),
             ref availableOnly);
 
         if (showMetallicOld != showMetallic || showWoodyOld != showWoody || showStonyOld != showStony
@@ -211,14 +211,14 @@ public class MainTabWindow_StuffList : MainTabWindow
                 StatDef.Named("Textile_Softness"), Source.BasesZero));
         }
 
-        rect.y += HeaderHeight;
-        GUI.BeginGroup(rect);
+        inRect.y += HeaderHeight;
+        GUI.BeginGroup(inRect);
         tableHeight = stuffCount * RowHeight;
-        var inRect = new Rect(0, 0, rect.width - 4, tableHeight + 100);
+        var innerRect = new Rect(0, 0, inRect.width - 4, tableHeight + 100);
         var num = 0;
         var ww = IconWidth;
         GUI.color = new Color(1f, 1f, 1f, 0.2f);
-        Widgets.DrawLineHorizontal(0, HeaderHeight, inRect.width);
+        Widgets.DrawLineHorizontal(0, HeaderHeight, innerRect.width);
         GUI.color = Color.white;
         printCellSort("label", "Name", ww, LabelWidth);
         ww += LabelWidth;
@@ -232,8 +232,8 @@ public class MainTabWindow_StuffList : MainTabWindow
             ww += statWidth;
         }
 
-        var scrollRect = new Rect(rect.x, rect.y, rect.width, rect.height);
-        Widgets.BeginScrollView(scrollRect, ref scrollPosition, inRect);
+        var scrollRect = new Rect(inRect.x, inRect.y, inRect.width, inRect.height);
+        Widgets.BeginScrollView(scrollRect, ref scrollPosition, innerRect);
         var stuffFiltered = stuff.ToList();
         if (!string.IsNullOrEmpty(searchText))
         {
@@ -243,7 +243,7 @@ public class MainTabWindow_StuffList : MainTabWindow
 
         foreach (var thing in stuffFiltered)
         {
-            drawRow(thing, num, inRect.width);
+            drawRow(thing, num, innerRect.width);
             num++;
         }
 

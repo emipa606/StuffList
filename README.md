@@ -12,6 +12,7 @@ https://steamcommunity.com/sharedfiles/filedetails/?id=2108623238
 - Added mass
 - Added stack-size
 - Added support for the Softness-stat from [[JPT] Soft Warm Beds](https://steamcommunity.com/sharedfiles/filedetails/?id=1713295858)
+- Added option to only show items in storage
 
 ![Image](https://img.litet.net/logos/Notice.png)
 	
@@ -39,4 +40,4 @@ Safe to add to savegames
 
  
 
-[![Image](https://img.shields.io/github/v/release/emipa606/StuffList?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2798767227) | tags: comparisons, tool
+[![Image](https://img.shields.io/github/v/release/emipa606/StuffList?label=latest%20version&style=plastic&color=9f1111&labelColor=black)](https://steamcommunity.com/sharedfiles/filedetails/changelog/2798767227) | comparisons, tool
